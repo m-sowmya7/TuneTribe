@@ -6,31 +6,23 @@ import toast from "react-hot-toast";
 import { Play, Pause, RefreshCw, Download, Share2 } from "lucide-react";
 import { Button, Slider, Navbar } from "../components/index";
 
-const Link = ({ href, className, children }) => {
-  return (
-    <RouterLink to={href} className={className}>
-      {children}
-    </RouterLink>
-  );
-};
-
 function AudioPlayer() {
   const { id } = useParams();
   const audioRef = useRef(null);
   const navigate = useNavigate();
-  const { current, setCurrent } = useMusic();
+  const { current, setCurrent, duration, setDuration, playing, setPlaying } =
+    useMusic();
 
   const [audioUrl, setAudioUrl] = useState("");
   const [data, setData] = useState(null);
-  const [playing, setPlaying] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [nextSong, setNextSong] = useState(null);
   const [recommendedSongs, setRecommendedSongs] = useState([]);
   const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
   const [isLooping, setIsLooping] = useState(false);
-  const [isDownloading, setIsDownloading] = useState(false);
+  // const [downloadUrl, setDownloadUrl] = useState("");
+  // const [isDownloading, setIsDownloading] = useState(false);
 
   const formatTime = (time) => {
     if (isNaN(time)) return "00:00";
@@ -51,7 +43,7 @@ function AudioPlayer() {
         const songData = song.data[0];
         setData(songData);
 
-        if (songData.downloadUrl) {
+        if (songData.url) {
           if (songData.downloadUrl[4]?.url)
             setAudioUrl(songData.downloadUrl[4].url);
           else if (songData.downloadUrl[3]?.url)
@@ -125,32 +117,33 @@ function AudioPlayer() {
     }
   };
 
-  const downloadSong = async () => {
-    if (!audioUrl || !data) return;
+  // const downloadSong = async () => {
+  //   if (!audioUrl || !data) return;
 
-    try {
-      setIsDownloading(true);
-      toast.loading("Downloading...");
+  //   try {
+  //     setIsDownloading(true);
+  //     toast.loading("Downloading...");
 
-      const response = await fetch(audioUrl);
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
+  //     const response = await fetch(downloadUrl);
+  //     const blob = await response.blob();
+  //     const url = URL.createObjectURL(blob);
 
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `${data.name || "music"}.mp3`;
-      a.click();
+  //     const a = document.createElement("a");
+  //     a.href = url;
+  //     a.download = `${data.name + "-Tune-Tribe" || "music"}.mp3`;
+  //     a.click();
 
-      URL.revokeObjectURL(url);
-      toast.dismiss();
-      toast.success("Download completed!");
-    } catch (err) {
-      console.error("Error downloading song:", err);
-      toast.error("Failed to download song");
-    } finally {
-      setIsDownloading(false);
-    }
-  };
+  //     URL.revokeObjectURL(url);
+  //     toast.dismiss();
+  //     toast.success("Download completed!");
+  //   } catch (err) {
+  //     console.error("Error downloading song:", err);
+  //     toast.dismiss();
+  //     toast.error("Failed to download song");
+  //   } finally {
+  //     setIsDownloading(false);
+  //   }
+  // };
 
   const handleShare = () => {
     try {
@@ -187,7 +180,7 @@ function AudioPlayer() {
 
     const handleTimeUpdate = () => {
       setCurrentTime(audio.currentTime);
-      setCurrent?.(audio.currentTime);
+      setCurrent(audio.currentTime);
     };
 
     const handleLoadedMetadata = () => {
@@ -363,7 +356,7 @@ function AudioPlayer() {
                   <RefreshCw className="h-4 w-4" />
                 </Button>
 
-                <Button
+                {/* <Button
                   variant="ghost"
                   size="icon"
                   onClick={downloadSong}
@@ -371,7 +364,7 @@ function AudioPlayer() {
                   className="text-white hover:bg-transparent hover:opacity-75"
                 >
                   <Download className="h-4 w-4" />
-                </Button>
+                </Button> */}
 
                 <Button
                   variant="ghost"
