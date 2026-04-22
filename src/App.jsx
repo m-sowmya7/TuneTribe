@@ -14,6 +14,7 @@ import { Toaster } from "react-hot-toast";
 import SearchPage from "./pages/SearchPage";
 import AlbumPage from "./pages/AlbumPage";
 import { ReactLenis } from "lenis/react";
+import appToast from "./utils/toast";
 
 // Component to conditionally render MiniPlayer based on route
 function ConditionalMiniPlayer() {
@@ -54,7 +55,11 @@ function App() {
 
   return (
     <>
-      <Toaster />
+      <Toaster
+        position="top-center"
+        toastOptions={appToast.options}
+        gutter={10}
+      />
       <MusicProvider>
         <ReactLenis root options={lenisOptions}>
           <Router>
