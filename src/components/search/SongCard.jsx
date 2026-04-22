@@ -1,25 +1,31 @@
 import { useMusic } from "../../context/MusicProvider";
+import { CircleCheck, ListPlus } from "lucide-react";
 
 function SongCard({ song }) {
-  const { setMusic } = useMusic();
+  const { playSong, addToQueue, isInQueue } = useMusic();
 
   const id = song.id;
   const primaryArtist = song.artists?.primary?.[0];
   const imageUrl =
     song.image?.find(
-      (img) => img.quality === "500x500" || img.quality === "high"
+      (img) => img.quality === "500x500" || img.quality === "high",
     )?.url || song.image?.[0]?.url;
   const artistName = primaryArtist ? primaryArtist.name : "Unknown Artist";
+  const isQueued = isInQueue(song.id);
 
   const handlePlay = () => {
-    // Update global context immediately for consistency
-    setMusic(song.id);
-    localStorage.setItem("last-played", song.id);
+    playSong(song.id);
+  };
+
+  const handleAddToQueue = (event) => {
+    event.stopPropagation();
+    if (isQueued) return;
+    addToQueue(song.id);
   };
 
   return (
     <div
-      className="w-44 h-[14.5rem] flex-shrink-0 cursor-pointer transition-transform hover:scale-105"
+      className="w-44 h-58 shrink-0 cursor-pointer transition-transform hover:scale-105"
       onClick={handlePlay}
     >
       <div className="relative w-full h-44 rounded-md overflow-hidden">
@@ -42,6 +48,24 @@ function SongCard({ song }) {
                 clipRule="evenodd"
               />
             </svg>
+          </button>
+        </div>
+        <div className="absolute bottom-2 right-2">
+          <button
+            onClick={handleAddToQueue}
+            title={isQueued ? "Already in queue" : "Add to queue"}
+            className={`transition-colors rounded-full p-1.5 text-white text-xs shadow-lg ${
+              isQueued
+                ? "bg-emerald-600/80 cursor-default"
+                : "bg-black/60 hover:bg-black/80 cursor-pointer"
+            }`}
+            disabled={isQueued}
+          >
+            {isQueued ? (
+              <CircleCheck className="h-3.5 w-3.5" />
+            ) : (
+              <ListPlus className="h-3.5 w-3.5" />
+            )}
           </button>
         </div>
       </div>

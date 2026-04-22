@@ -1,17 +1,36 @@
 import { useRef, useState, useEffect } from "react";
-import { useParams, useNavigate, Link as RouterLink } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useMusic } from "../context/MusicProvider";
 import { getSongById, getSongSuggestions } from "../utils/api";
-import toast from "react-hot-toast";
-import { Play, Pause, RefreshCw, Download, Share2 } from "lucide-react";
+import appToast from "../utils/toast";
+import {
+  Play,
+  Pause,
+  RefreshCw,
+  Share2,
+  ListPlus,
+  CircleCheck,
+} from "lucide-react";
 import { Button, Slider, Navbar } from "../components/index";
+import QueuePanel from "../components/player/QueuePanel";
 
 function AudioPlayer() {
   const { id } = useParams();
   const audioRef = useRef(null);
   const navigate = useNavigate();
-  const { current, setCurrent, duration, setDuration, playing, setPlaying } =
-    useMusic();
+  const {
+    current,
+    setCurrent,
+    duration,
+    setDuration,
+    playing,
+    setPlaying,
+    music,
+    queue,
+    playSong,
+    addToQueue,
+    playNextInQueue,
+  } = useMusic();
 
   const [audioUrl, setAudioUrl] = useState("");
   const [data, setData] = useState(null);
@@ -30,7 +49,7 @@ function AudioPlayer() {
     const seconds = Math.floor(time % 60);
     return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(
       2,
-      "0"
+      "0",
     )}`;
   };
 
@@ -94,7 +113,7 @@ function AudioPlayer() {
       } else {
         audioRef.current.play().catch((err) => {
           console.error("Error playing audio:", err);
-          toast.error("Failed to play audio");
+          appToast.error("Failed to play audio");
         });
       }
       setPlaying(!playing);
@@ -113,7 +132,7 @@ function AudioPlayer() {
     if (audioRef.current) {
       audioRef.current.loop = !audioRef.current.loop;
       setIsLooping(!isLooping);
-      toast.success(isLooping ? "Loop disabled" : "Loop enabled");
+      appToast.success(isLooping ? "Loop disabled" : "Loop enabled");
     }
   };
 
@@ -148,19 +167,27 @@ function AudioPlayer() {
   const handleShare = () => {
     try {
       navigator.clipboard.writeText(window.location.href);
-      toast.success("Link copied to clipboard");
+      appToast.success("Link copied to clipboard");
     } catch (err) {
       console.error("Error sharing song:", err);
-      toast.error("Failed to share song");
+      appToast.error("Failed to share song");
     }
   };
 
   const playRecommendedSong = (songId) => {
+    playSong(songId);
     navigate(`/player/${songId}`);
+  };
+
+  const queueRecommendedSong = (event, songId) => {
+    event.stopPropagation();
+    if (queue.includes(songId)) return;
+    addToQueue(songId);
   };
 
   useEffect(() => {
     if (id) {
+      playSong(id, { resetTime: music !== id });
       getSong();
     }
 
@@ -172,7 +199,7 @@ function AudioPlayer() {
         setCurrent(0);
       }
     };
-  }, [id]);
+  }, [id, music, playSong]);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -188,7 +215,15 @@ function AudioPlayer() {
     };
 
     const handleEnded = () => {
-      if (!isLooping && nextSong) {
+      if (isLooping) return;
+
+      const queuedSongId = playNextInQueue();
+      if (queuedSongId) {
+        navigate(`/player/${queuedSongId}`);
+        return;
+      }
+
+      if (nextSong) {
         playRecommendedSong(nextSong.id);
       }
     };
@@ -210,7 +245,7 @@ function AudioPlayer() {
       audio.removeEventListener("play", () => setPlaying(true));
       audio.removeEventListener("pause", () => setPlaying(false));
     };
-  }, [audioRef.current, isLooping, nextSong]);
+  }, [audioRef.current, isLooping, nextSong, navigate, playNextInQueue]);
 
   useEffect(() => {
     if (audioUrl && audioRef.current) {
@@ -391,12 +426,12 @@ function AudioPlayer() {
                 onClick={() => playRecommendedSong(recommendedSongs[0].id)}
               >
                 <div className="p-4 flex items-center gap-4">
-                  <div className="w-16 h-16 flex-shrink-0">
+                  <div className="w-16 h-16 shrink-0">
                     {recommendedSongs[0].image && (
                       <img
                         src={
                           recommendedSongs[0].image.find(
-                            (img) => img.quality === "150x150"
+                            (img) => img.quality === "150x150",
                           )?.url || recommendedSongs[0].image[0]?.url
                         }
                         alt={recommendedSongs[0].name}
@@ -405,24 +440,49 @@ function AudioPlayer() {
                     )}
                   </div>
 
-                  <div className="flex-grow min-w-0">
+                  <div className="grow min-w-0">
                     <h3 className="font-medium text-white truncate">
                       {recommendedSongs[0].name}
                     </h3>
                     <p className="text-zinc-400 text-sm truncate">
                       {getArtistName(recommendedSongs[0])}
                     </p>
-                    <p className="text-amber-500 text-xs">
-                      Plays next • {formatTime(recommendedSongs[0].duration)}
-                    </p>
+                    {queue.length === 0 ? (
+                      <p className="text-amber-500 text-xs">
+                        Plays next • {formatTime(recommendedSongs[0].duration)}
+                      </p>
+                    ) : (
+                      <p className="text-zinc-500 text-xs">
+                        {formatTime(recommendedSongs[0].duration)}
+                      </p>
+                    )}
                   </div>
 
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="bg-amber-800 hover:bg-amber-700 rounded-full h-10 w-10 flex items-center justify-center flex-shrink-0"
+                    onClick={(event) =>
+                      queueRecommendedSong(event, recommendedSongs[0].id)
+                    }
+                    title={
+                      queue.includes(recommendedSongs[0].id)
+                        ? "Already in queue"
+                        : "Add to queue"
+                    }
+                    className={`rounded-full h-8 w-8 flex items-center justify-center shrink-0 ${
+                      queue.includes(recommendedSongs[0].id)
+                        ? "bg-emerald-600/80 cursor-default"
+                        : queue.length === 0
+                          ? "bg-amber-800 hover:bg-amber-700 cursor-pointer"
+                          : "bg-neutral-700 hover:bg-neutral-600 cursor-pointer"
+                    }`}
+                    disabled={queue.includes(recommendedSongs[0].id)}
                   >
-                    <Play className="h-5 w-5 ml-0.5" />
+                    {queue.includes(recommendedSongs[0].id) ? (
+                      <CircleCheck className="h-4 w-4" />
+                    ) : (
+                      <ListPlus className="h-4 w-4" />
+                    )}
                   </Button>
                 </div>
               </div>
@@ -435,7 +495,7 @@ function AudioPlayer() {
                   onClick={() => playRecommendedSong(song.id)}
                 >
                   <div className="p-4 flex items-center gap-4">
-                    <div className="w-16 h-16 flex-shrink-0">
+                    <div className="w-16 h-16 shrink-0">
                       {song.image && (
                         <img
                           src={
@@ -448,7 +508,7 @@ function AudioPlayer() {
                       )}
                     </div>
 
-                    <div className="flex-grow min-w-0">
+                    <div className="grow min-w-0">
                       <h3 className="font-medium text-white truncate">
                         {song.name}
                       </h3>
@@ -463,9 +523,24 @@ function AudioPlayer() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="bg-neutral-700 hover:bg-neutral-600 rounded-full h-10 w-10 flex items-center justify-center flex-shrink-0"
+                      onClick={(event) => queueRecommendedSong(event, song.id)}
+                      title={
+                        queue.includes(song.id)
+                          ? "Already in queue"
+                          : "Add to queue"
+                      }
+                      className={`rounded-full h-8 w-8 flex items-center justify-center shrink-0 ${
+                        queue.includes(song.id)
+                          ? "bg-emerald-600/80 cursor-default"
+                          : "bg-neutral-700 hover:bg-neutral-600 cursor-pointer"
+                      }`}
+                      disabled={queue.includes(song.id)}
                     >
-                      <Play className="h-5 w-5 ml-0.5" />
+                      {queue.includes(song.id) ? (
+                        <CircleCheck className="h-4 w-4" />
+                      ) : (
+                        <ListPlus className="h-4 w-4" />
+                      )}
                     </Button>
                   </div>
                 </div>
@@ -473,6 +548,8 @@ function AudioPlayer() {
             </div>
           </div>
         )}
+
+        <QueuePanel />
       </div>
     </div>
   );
