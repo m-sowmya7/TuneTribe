@@ -7,28 +7,82 @@ export default function MiniPlayer({ song, onClose, onNext, onPrev }) {
   const navigate = useNavigate();
 
   const [playing, setPlaying] = useState(true);
+  const [currentSongId, setCurrentSongId] = useState(null);
   const audioRef = useRef(null);
 
   const togglePlayPause = () => {
     if (playing) {
       audioRef.current.pause();
+      setPlaying(false);
     } else {
-      audioRef.current.play();
+      audioRef.current.play().catch(console.error);
+      setPlaying(true);
     }
-    setPlaying(!playing);
   };
 
+  // Handle song changes
   useEffect(() => {
-    if (audioRef.current && playing) {
-      audioRef.current.play();
+    if (song?.id !== currentSongId) {
+      setCurrentSongId(song?.id);
+      
+      if (audioRef.current) {
+        // Always pause and reset first
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+        
+        // Small delay to ensure previous audio is stopped
+        setTimeout(() => {
+          if (playing && audioRef.current && song?.audioUrl) {
+            audioRef.current.play().catch(console.error);
+          }
+        }, 50);
+      }
     }
-  }, [song]);
+  }, [song?.id, song?.audioUrl, currentSongId, playing]);
+
+  // Cleanup on component unmount
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+    };
+  }, []);
+
+  // Handle audio events
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const handlePlay = () => setPlaying(true);
+    const handlePause = () => setPlaying(false);
+    const handleEnded = () => {
+      setPlaying(false);
+      // Optionally auto-play next song
+      // onNext();
+    };
+
+    audio.addEventListener('play', handlePlay);
+    audio.addEventListener('pause', handlePause);
+    audio.addEventListener('ended', handleEnded);
+
+    return () => {
+      audio.removeEventListener('play', handlePlay);
+      audio.removeEventListener('pause', handlePause);
+      audio.removeEventListener('ended', handleEnded);
+    };
+  }, []);
 
   if (!song) return null;
 
   return (
     <div className="fixed bottom-4 right-4 z-50 bg-white dark:bg-zinc-900 rounded-xl shadow-lg flex items-center gap-3 p-3 w-[320px] border dark:border-zinc-700">
-      <audio ref={audioRef} src={song.audioUrl} autoPlay />
+      <audio 
+        ref={audioRef} 
+        src={song.audioUrl} 
+        preload="metadata"
+      />
 
       <img src={song.imageUrl} alt="cover" className="w-14 h-14 rounded-lg object-cover" />
 

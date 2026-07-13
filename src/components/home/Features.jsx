@@ -1,25 +1,27 @@
+import { Search, Music, Smartphone, Moon } from "lucide-react";
+
 const Features = () => {
   const features = [
     {
-      icon: "🔍",
+      icon: Search,
       title: "Powerful Search",
       description:
         "Find any song, artist or album with our lightning-fast search powered by Spotify API.",
     },
     {
-      icon: "🎧",
+      icon: Music,
       title: "Preview Tracks",
       description:
         "Listen to song previews directly in your browser before adding to your library.",
     },
     {
-      icon: "📱",
+      icon: Smartphone,
       title: "Responsive Design",
       description:
         "Enjoy TuneTribe on any device with our fully responsive and adaptive interface.",
     },
     {
-      icon: "🌙",
+      icon: Moon,
       title: "Dark Mode",
       description:
         "Easy on the eyes with our carefully crafted dark theme optimized for music lovers.",
@@ -45,7 +47,7 @@ const Features = () => {
               key={index}
               className="bg-neutral-800 p-6 rounded-xl transition-all hover:translate-y-[-5px] hover:shadow-[0_10px_20px_rgba(0,0,0,0.3)] duration-300"
             >
-              <div className="text-4xl mb-4">{feature.icon}</div>
+              <div className="text-4xl mb-4"><feature.icon /></div>
               <h3 className="text-white text-xl font-semibold mb-2">
                 {feature.title}
               </h3>

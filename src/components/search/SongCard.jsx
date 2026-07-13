@@ -1,6 +1,5 @@
 import { useState } from "react";
 import MiniPlayer from "../player/MiniPlayer";
-
 function SongCard({ song }) {
   const [activeSong, setActiveSong] = useState(null);
 

@@ -14,8 +14,12 @@ export default function Dashboard() {
 
         {/* Latest */}
         {latest.loading ? (
-          <h1>hii</h1>
-          // spinner
+          <div className="flex items-center justify-center min-h-[60vh]">
+            <div
+              className="h-12 w-12 animate-spin rounded-full border-4 border-neutral-700 border-t-amber-500"
+              role="status"
+            />
+          </div>
         ) : latest.error ? (
           <div className="text-red-500">{latest.error}</div>
         ) : (
@@ -30,8 +34,12 @@ export default function Dashboard() {
 
         {/* Trending songs only */}
         {trending.loading ? (
-          <h1>hii</h1>
-          // spinner
+          <div className="flex items-center justify-center min-h-[60vh]">
+            <div
+              className="h-12 w-12 animate-spin rounded-full border-4 border-neutral-700 border-t-amber-500"
+              role="status"
+            />
+          </div>
         ) : trending.error ? (
           <div className="text-red-500">{trending.error}</div>
         ) : (
@@ -39,8 +47,8 @@ export default function Dashboard() {
             title="Trending Songs"
             subtitle="What’s hot right now"
             songs={trending.songs}
-            albums={trending.albums}           
-            artists={trending.artists}          
+            albums={trending.albums}
+            artists={trending.artists}
           />
         )}
 

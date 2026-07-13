@@ -2,11 +2,11 @@ import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
-    <div className="bg-black relative overflow-hidden">
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-black to-neutral-900 opacity-95"></div>
-        <div className="absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_500px_at_50%_200px,rgba(120,53,15,0.3),transparent)]"></div>
-      </div>
+    <div className="relative overflow-hidden">
+      {/* <div className="absolute inset-0 z-0"> */}
+        {/* <div className="absolute inset-0 bg-gradient-to-b from-black via-black to-neutral-900 opacity-95"></div> */}
+        {/* <div className="absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_500px_at_50%_200px,rgba(120,53,15,0.3),transparent)]"></div> */}
+      {/* </div> */}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28 relative z-10">
         <div className="text-center">
@@ -40,9 +40,9 @@ const Hero = () => {
           </div>
           <div className="relative flex justify-center">
             <img
-              src="https://i.pinimg.com/564x/e4/cb/4b/e4cb4ba9451bf3c28c3aa68e71c7057b.jpg"
+              src="./mucis.jpg"
               alt="Music visualization"
-              className="rounded-lg shadow-2xl max-w-xs md:max-w-lg w-full"
+              className="shadow-xl max-w-1.5 md:max-w-md"
             />
           </div>
         </div>
