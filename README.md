@@ -3,7 +3,7 @@
 > Because who needs another music app? Apparently, we all do.
 
 Welcome to **TuneTribe**—the web app that lets you search for songs, preview tracks, and bask in the glory of a slick UI, all powered by the Spotify API (via the magical Nocode API).  
-Built with React and Vite, styled with Bootstrap and a sprinkle of custom CSS, and deployed to Vercel faster than you can say "skip intro."
+Built with React and Vite, styled Tailwind CSS, powered by the unofficial JioSaavn API and deployed to Vercel faster than you can say "skip intro."
 
 ## 🚀 Live Demo
 
@@ -11,25 +11,25 @@ Try it, break it, love it: [https://tune-tribe.smyweb.xyz](https://tune-tribe.sm
 
 ## 📋 Features
 
-- **🔍 Search for Tracks:** Type basically *anything* and get a list of Spotify tracks. (Yes, even “Baby Shark,” but don’t say we didn’t warn you.)
-- **🎧 Preview Songs:** Not sure you like it? Sample a short preview before you commit to pretending it’s your favorite.
-- **📜 Track Details:** Because who doesn’t love knowing the artist, release date, and seeing that album cover in 400x400 glory?
-- **🌐 Responsive Design:** Looks fabulous on mobile, tablet, and probably your smart fridge.
-- **🎨 Background Wallpaper:** Enjoy our majestic default background image until you decide to search. (No, you can’t change it. Yet.)
+- **Search for Tracks:** Type basically *anything* and get a list of related tracks, albums and artist's. (Yes, even “Baby Shark, Cocomelon” but don’t say we didn’t warn you.)
+- **Mini Player:** Keep exploring while your music does its thing. Multitasking has never sounded this good.
+- **Trending Tracks:** Find out what's hot before your "music expert" friend tells you about it.
+- **Queue It Up:** – Throw your favorite songs into the queue and let autoplay do the heavy lifting. Congratulations, you're now a DJ with zero effort.
+- **Completely Free:** No premium. No subscriptions. No "Pay to skip this song" nonsense.
 
 ## 🛠️ Tech Stack
 
 - **Frontend:** React, Vite
-- **Styling:** Bootstrap, Custom CSS (because vanilla is sometimes the best flavor)
-- **API:** Spotify (via [Nocode API](https://nocodeapi.com/))
+- **Styling:** Tailwind CSS (custom-built, because copy-pasting components is too mainstream)
+- **API:** Unofficial JioSaavn API
 - **Deployment:** Vercel (because we like things easy)
 
 ## 🎤 Installation
 
-Because some people like running things locally:
+Feeling adventurous? Run it locally.
 
 ```bash
-git clone https://github.com/your-username/tunetribe.git
+git clone https://github.com/m-sowmya7/TuneTribe.git
 cd tunetribe
 npm install
 npm run dev
@@ -39,10 +39,10 @@ npm run dev
 
 ### API Setup
 
-1. Get yourself a [Nocode API](https://nocodeapi.com/) key for Spotify (no, we can't give you ours).
+1. Get yourself a songs api key (no, we can't give you ours).
 2. Create a `.env` file and add:
     ```
-    VITE_SPOTIFY_API_URL=your_nocodeapi_spotify_url
+    VITE_PUBLIC_API_URL=your_songs_api
     ```
 3. Save, restart, and off you go.
 
@@ -57,9 +57,9 @@ Open a pull request and prove you’re not a robot.
 
 ## 🙏 Credits & Disclaimers
 
-- Powered by the Spotify API, thanks to the Nocode API. All music data belongs to their respective copyright overlords.
+- Powered by the JioSavan API, thanks to the some random developer. All music data belongs to their respective copyright overlords.
 - UI inspired by “we want nice things, but also, not too many buttons.”
-- No actual music is hosted here. Just previews. Please don’t sue us, Spotify.
+- No actual music is hosted here. Just previews. Please don’t sue us, JioSavan.
 
 ## 📬 Contact
 
