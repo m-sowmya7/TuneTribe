@@ -1,137 +1,131 @@
-import { useState } from "react";
+import { Check, Sparkles } from "lucide-react";
+import { GetStartedButton } from "../layout/Navbar";
+import { useScrollReveal } from "../../hooks/useScrollReveal";
+
+const plans = [
+  {
+    name: "Free",
+    price: "$0",
+    features: [
+      "Unlimited song searches",
+      "Build your own queue",
+      "Costs exactly nothing",
+    ],
+    popular: false,
+  },
+  {
+    name: "Premium",
+    price: "$0",
+    features: [
+      "Everything in Free",
+      "A fancier title",
+      "Unlimited bragging rights",
+    ],
+    popular: true,
+  },
+  {
+    name: "Family",
+    price: "$0",
+    features: [
+      "Everything in Premium",
+      "Bring your family along",
+      "They'll still steal your headphones",
+    ],
+    popular: false,
+  },
+];
 
 const Pricing = () => {
-  const [annual, setAnnual] = useState(false);
-
-  const plans = [
-    {
-      name: "Free",
-      price: { monthly: "$0", annual: "$0" },
-      features: [
-        "Access to basic search",
-        "Limited track previews",
-        "Ad supported",
-        "Mobile access",
-      ],
-      buttonText: "Get Started",
-      popular: false,
-    },
-    {
-      name: "Premium",
-      price: { monthly: "$9.99", annual: "$7.99" },
-      features: [
-        "Unlimited searches",
-        "Full track previews",
-        "Ad-free experience",
-        "Offline listening",
-        "HD audio quality",
-      ],
-      buttonText: "Get Premium",
-      popular: true,
-    },
-    {
-      name: "Family",
-      price: { monthly: "$14.99", annual: "$12.99" },
-      features: [
-        "Up to 6 accounts",
-        "All Premium features",
-        "Parental controls",
-        "Family mix playlist",
-        "Priority support",
-      ],
-      buttonText: "Choose Family",
-      popular: false,
-    },
-  ];
+  const [headingRef, headingVisible] = useScrollReveal();
+  const [gridRef, gridVisible] = useScrollReveal({ threshold: 0.05 });
 
   return (
-    <div id="pricing" className="bg-black py-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Simple, Transparent Pricing
+    <section id="pricing" className="bg-black py-24">
+      <div className="mx-auto max-w-6xl px-5 sm:px-8">
+        <div
+          ref={headingRef}
+          className={`mb-16 text-center ${headingVisible ? "reveal" : "opacity-0"}`}
+        >
+          <h2
+            className="text-3xl sm:text-4xl font-bold tracking-tight text-white"
+            style={{ textWrap: "balance" }}
+          >
+            Pricing
           </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto mb-8">
-            Choose the plan that fits your needs
-          </p>
 
-          <div className="inline-flex items-center bg-neutral-800 p-1 rounded-full">
-            <button
-              onClick={() => setAnnual(false)}
-              className={`px-4 py-2 rounded-full text-sm ${
-                !annual ? "bg-amber-800 text-white shadow-lg" : "text-gray-400"
-              } transition-colors duration-200`}
-            >
-              Monthly
-            </button>
-            <button
-              onClick={() => setAnnual(true)}
-              className={`px-4 py-2 rounded-full text-sm ${
-                annual ? "bg-amber-800 text-white shadow-lg" : "text-gray-400"
-              } transition-colors duration-200 ml-1`}
-            >
-              Annual (Save 20%)
-            </button>
-          </div>
+          <p
+            className="mt-4 mx-auto max-w-sm text-sm sm:text-base leading-relaxed text-neutral-500"
+            style={{ textWrap: "balance" }}
+          >
+            Choose wisely.
+            <br />
+            They all cost the same.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div
+          ref={gridRef}
+          className="grid gap-5 md:grid-cols-3"
+        >
           {plans.map((plan, index) => (
             <div
-              key={index}
-              className={`bg-neutral-900 rounded-2xl overflow-hidden transition-all duration-300 hover:translate-y-[-5px] ${
-                plan.popular ? "border-2 border-amber-800 relative" : ""
+              key={plan.name}
+              className={`rounded-2xl p-px transition-all duration-300 hover:-translate-y-1 ${gridVisible ? "reveal" : "opacity-0"} ${
+                plan.popular
+                  ? "bg-gradient-to-b from-amber-700 via-amber-700/40 to-amber-700/10"
+                  : "bg-neutral-800"
               }`}
+              style={{ "--stagger": `${index}` }}
             >
-              {plan.popular && (
-                <div className="absolute top-0 right-0 bg-amber-800 text-white text-xs font-bold px-3 py-1 uppercase tracking-wider">
-                  Popular
+              <div className="flex h-full flex-col rounded-2xl bg-black p-7 lg:p-8">
+                <div className="mb-6 flex h-6 items-center">
+                  {plan.popular && (
+                    <>
+                      <Sparkles className="h-4 w-4 text-amber-700" />
+                      <span className="ml-2 text-xs font-medium uppercase tracking-[0.2em] text-amber-700">
+                        Recommended
+                      </span>
+                    </>
+                  )}
                 </div>
-              )}
-              <div className="p-8">
-                <h3 className="text-xl font-semibold text-white mb-2">
+
+                <h3 className="text-xl font-semibold text-white">
                   {plan.name}
                 </h3>
-                <div className="mb-4">
-                  <span className="text-4xl font-bold text-white">
-                    {annual ? plan.price.annual : plan.price.monthly}
-                  </span>
-                  <span className="text-gray-400 ml-1">/month</span>
+
+                <div className="mt-5 mb-10">
+                  <div className="flex items-end gap-2">
+                    <span className="text-5xl font-bold tracking-tight text-white">
+                      {plan.price}
+                    </span>
+
+                    <span className="mb-1 text-neutral-500">forever</span>
+                  </div>
                 </div>
-                <ul className="space-y-3 mb-8">
-                  {plan.features.map((feature, i) => (
-                    <li key={i} className="flex items-start text-gray-300">
-                      <svg
-                        className="h-5 w-5 text-amber-800 mr-2"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      {feature}
+
+                <ul className="flex-1 space-y-5">
+                  {plan.features.map((feature) => (
+                    <li
+                      key={feature}
+                      className="flex items-start gap-3 text-neutral-400"
+                    >
+                      <Check className="mt-[2px] h-4 w-4 shrink-0 text-amber-700" />
+                      <span>{feature}</span>
                     </li>
                   ))}
                 </ul>
-                <button
-                  className={`w-full py-3 px-4 rounded-lg font-medium transition-all duration-300 ${
-                    plan.popular
-                      ? "bg-gradient-to-r from-amber-900 to-amber-700 text-white shadow-[0_0_10px_rgba(146,64,14,0.5)]"
-                      : "bg-neutral-800 text-white hover:bg-neutral-700"
-                  }`}
-                >
-                  {plan.buttonText}
-                </button>
+
+                {plan.popular && (
+                  <div className="mt-10 grid place-items-center">
+                    <GetStartedButton />
+                  </div>
+                )}
               </div>
             </div>
           ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

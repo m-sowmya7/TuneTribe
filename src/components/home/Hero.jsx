@@ -1,37 +1,35 @@
-import { Link } from "react-router-dom";
-
 const Hero = () => {
   return (
-    <div className="relative overflow-hidden">
-      {/* <div className="absolute inset-0 z-0"> */}
-        {/* <div className="absolute inset-0 bg-gradient-to-b from-black via-black to-neutral-900 opacity-95"></div> */}
-        {/* <div className="absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_500px_at_50%_200px,rgba(120,53,15,0.3),transparent)]"></div> */}
-      {/* </div> */}
+    <div className="relative overflow-hidden min-h-screen flex items-center">
+      {/* Full-bleed atmospheric image — blurred, desaturated, low opacity */}
+      <div className="absolute inset-0 z-0">
+        <img
+          src="/music.jpg"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover opacity-[0.07] blur-sm scale-110"
+        />
+        <div className="absolute inset-0 bg-black/60" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_50%_40%,rgba(180,120,40,0.08),transparent)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
+      </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28 relative z-10">
-        <div className="text-center">
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-            Discover Your Perfect <span className="text-amber-700">Sound</span>
+      {/* Content */}
+      <div className="max-w-6xl mx-auto px-5 sm:px-8 py-20 relative z-10 w-full text-center flex flex-col items-center">
+        <div className="max-w-2xl flex flex-col items-center">
+          <h1 className="reveal-hero text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.05] text-white" style={{ "--stagger": "0ms" }}>
+            Music, <span className="text-amber-700">without limits.</span>
           </h1>
-          <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-10">
-            Search, stream, and enjoy millions of tracks from your favorite
-            artists. Experience music like never before with TuneTribe's
-            immersive platform.
+
+          <p
+            className="reveal-hero mt-8 max-w-xl text-lg text-neutral-400 leading-relaxed"
+            style={{ textWrap: "balance", "--stagger": "120ms" }}
+          >
+            Every song you love, ready to play instantly.
+            <span className="block mt-2 text-neutral-500">
+              Free forever
+            </span>
           </p>
-          <div className="flex flex-col md:flex-row justify-center gap-4">
-            <Link
-              to="/dashboard"
-              className="bg-gradient-to-r from-amber-900 to-amber-700 hover:opacity-90 text-white px-8 py-3 rounded-md text-lg font-medium transition duration-300 ease-in-out shadow-[0_0_15px_rgba(146,64,14,0.5)]"
-            >
-              Start Listening
-            </Link>
-            <Link
-              to="#features"
-              className="bg-transparent border border-neutral-700 hover:border-neutral-500 text-white px-8 py-3 rounded-md text-lg font-medium transition duration-300"
-            >
-              Learn More
-            </Link>
-          </div>
         </div>
 
         <div className="mt-20 relative">
@@ -40,13 +38,17 @@ const Hero = () => {
           </div>
           <div className="relative flex justify-center">
             <img
-              src={`${import.meta.env.BASE_URL}mucis.jpg`}
+              src={`${import.meta.env.BASE_URL}music.jpg`}
               alt="Music visualization"
-              className="shadow-xl max-w-1.5 md:max-w-md"
+              className="reveal-hero shadow-xl max-w-1.5 md:max-w-md"
+              style={{ "--stagger": "280ms" }}
             />
           </div>
         </div>
       </div>
+
+      {/* Bottom bleed into Features */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black to-transparent z-10" />
     </div>
   );
 };

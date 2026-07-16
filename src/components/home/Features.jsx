@@ -1,59 +1,82 @@
-import { Search, Music, Smartphone, Moon } from "lucide-react";
+import { Search, ListMusic, PanelBottom, Flame } from "lucide-react";
+import { useScrollReveal } from "../../hooks/useScrollReveal";
+
+const features = [
+  {
+    icon: Search,
+    title: "Powerful Search",
+    description:
+      "Instantly discover songs, artists, and albums with fast, accurate search.",
+  },
+  {
+    icon: ListMusic,
+    title: "Smart Queue",
+    description:
+      "Build your listening queue and let autoplay keep the music going without interruption.",
+  },
+  {
+    icon: PanelBottom,
+    title: "Mini Player",
+    description:
+      "Browse trending tracks and albums while keeping playback controls within easy reach.",
+  },
+  {
+    icon: Flame,
+    title: "Trending & Latest",
+    description:
+      "Explore trending tracks and newly released albums to discover your next favorite song.",
+  },
+];
 
 const Features = () => {
-  const features = [
-    {
-      icon: Search,
-      title: "Powerful Search",
-      description:
-        "Find any song, artist or album with our lightning-fast search powered by Spotify API.",
-    },
-    {
-      icon: Music,
-      title: "Preview Tracks",
-      description:
-        "Listen to song previews directly in your browser before adding to your library.",
-    },
-    {
-      icon: Smartphone,
-      title: "Responsive Design",
-      description:
-        "Enjoy TuneTribe on any device with our fully responsive and adaptive interface.",
-    },
-    {
-      icon: Moon,
-      title: "Dark Mode",
-      description:
-        "Easy on the eyes with our carefully crafted dark theme optimized for music lovers.",
-    },
-  ];
+  const [headingRef, headingVisible] = useScrollReveal();
+  const [gridRef, gridVisible] = useScrollReveal({ threshold: 0.05 });
 
   return (
-    <div id="features" className="bg-neutral-900 py-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Why Choose TuneTribe?
+    <div id="features" className="bg-black py-24">
+      <div className="max-w-6xl mx-auto px-5 sm:px-8">
+        <div
+          ref={headingRef}
+          className={`text-center mb-16 ${headingVisible ? "reveal" : "opacity-0"}`}
+        >
+          <h2
+            className="text-3xl sm:text-4xl font-bold text-white mb-4 tracking-tight"
+            style={{ textWrap: "balance" }}
+          >
+            Why TuneTribe?
           </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto">
-            Discover a new way to experience music with our feature-rich
-            platform
+          <p
+            className="text-neutral-500 max-w-md mx-auto text-sm sm:text-base leading-relaxed"
+            style={{ textWrap: "pretty" }}
+          >
+            A minimal, focused music experience — nothing you don&apos;t need.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {features.map((feature, index) => (
-            <div
-              key={index}
-              className="bg-neutral-800 p-6 rounded-xl transition-all hover:translate-y-[-5px] hover:shadow-[0_10px_20px_rgba(0,0,0,0.3)] duration-300"
-            >
-              <div className="text-4xl mb-4"><feature.icon /></div>
-              <h3 className="text-white text-xl font-semibold mb-2">
-                {feature.title}
-              </h3>
-              <p className="text-gray-400">{feature.description}</p>
-            </div>
-          ))}
+        <div
+          ref={gridRef}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-neutral-800/50 rounded-xl overflow-hidden"
+        >
+          {features.map((feature, index) => {
+            const Icon = feature.icon;
+            return (
+              <div
+                key={index}
+                className={`bg-black p-7 sm:p-8 group hover:bg-neutral-900/50 transition-colors duration-200 ${gridVisible ? "reveal" : "opacity-0"}`}
+                style={{ "--stagger": `${index}` }}
+              >
+                <div className="w-10 h-10 rounded-lg bg-neutral-900 border border-neutral-800 flex items-center justify-center mb-5 group-hover:border-neutral-700 transition-colors">
+                  <Icon className="w-5 h-5 text-amber-600" />
+                </div>
+                <h3 className="text-white text-base font-semibold mb-2">
+                  {feature.title}
+                </h3>
+                <p className="text-neutral-500 text-sm leading-relaxed">
+                  {feature.description}
+                </p>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

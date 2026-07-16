@@ -43,6 +43,7 @@ npm run dev
 2. Create a `.env` file and add:
     ```
     VITE_PUBLIC_API_URL=your_songs_api
+    VITE_PUBLIC_BASE_URL=localhost_frontend_url (typically: http://localhost:5173)
     ```
 3. Save, restart, and off you go.
 

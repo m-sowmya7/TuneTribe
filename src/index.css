@@ -1,85 +1,75 @@
 @import "tailwindcss";
 
-
+/* ── Custom scrollbar ── */
 .custom-scroll {
   overflow-x: auto;
-  scrollbar-width: none; 
+  scrollbar-width: none;
 }
 .custom-scroll::-webkit-scrollbar {
-  height: 6px;           
-  opacity: 0;             
-  transition: opacity .25s ease;
+  height: 6px;
+  opacity: 0;
+  transition: opacity 0.25s ease;
 }
 .custom-scroll::-webkit-scrollbar-track {
   background: transparent;
 }
 .custom-scroll::-webkit-scrollbar-thumb {
-  background-color: rgba(255,255,255,0.4);
+  background-color: rgba(255, 255, 255, 0.4);
   border-radius: 9999px;
   border: 2px solid transparent;
   background-clip: content-box;
 }
 
-/* reveal on hover of the wrapper group */
 .group:hover .custom-scroll::-webkit-scrollbar {
   opacity: 1 !important;
 }
 .group:hover .custom-scroll {
-  scrollbar-width: thin;                                       
-  scrollbar-color: rgba(255,255,255,0.4) transparent;            
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.4) transparent;
 }
 
 ::-webkit-scrollbar {
   width: 10px;
 }
-
 ::-webkit-scrollbar-track {
   -webkit-appearance: none !important;
 }
-
-
 ::-webkit-scrollbar-thumb {
   background: #7b3306;
   border-radius: 5px;
 }
 
-
-/* Inter font family */
+/* ── Font families ── */
 .inter-thin {
   font-family: "Inter", sans-serif;
   font-optical-sizing: auto;
   font-weight: 100;
   font-style: normal;
 }
-
 .inter-light {
   font-family: "Inter", sans-serif;
   font-optical-sizing: auto;
   font-weight: 300;
   font-style: normal;
 }
-
 .inter-regular {
   font-family: "Inter", sans-serif;
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
 }
-
 .inter-medium {
   font-family: "Inter", sans-serif;
   font-optical-sizing: auto;
   font-weight: 500;
   font-style: normal;
 }
-
 .inter-semibold {
   font-family: "Inter", sans-serif;
   font-optical-sizing: auto;
   font-weight: 600;
   font-style: normal;
 }
-
 .inter-bold {
   font-family: "Inter", sans-serif;
   font-optical-sizing: auto;
@@ -87,7 +77,6 @@
   font-style: normal;
 }
 
-/* Bricolage Grotesque font family */
 .bricolage-thin {
   font-family: "Bricolage Grotesque", sans-serif;
   font-optical-sizing: auto;
@@ -95,7 +84,6 @@
   font-style: normal;
   font-variation-settings: "wdth" 100;
 }
-
 .bricolage-light {
   font-family: "Bricolage Grotesque", sans-serif;
   font-optical-sizing: auto;
@@ -103,7 +91,6 @@
   font-style: normal;
   font-variation-settings: "wdth" 100;
 }
-
 .bricolage-regular {
   font-family: "Bricolage Grotesque", sans-serif;
   font-optical-sizing: auto;
@@ -111,7 +98,6 @@
   font-style: normal;
   font-variation-settings: "wdth" 100;
 }
-
 .bricolage-medium {
   font-family: "Bricolage Grotesque", sans-serif;
   font-optical-sizing: auto;
@@ -119,7 +105,6 @@
   font-style: normal;
   font-variation-settings: "wdth" 100;
 }
-
 .bricolage-semibold {
   font-family: "Bricolage Grotesque", sans-serif;
   font-optical-sizing: auto;
@@ -127,7 +112,6 @@
   font-style: normal;
   font-variation-settings: "wdth" 100;
 }
-
 .bricolage-bold {
   font-family: "Bricolage Grotesque", sans-serif;
   font-optical-sizing: auto;
@@ -136,7 +120,7 @@
   font-variation-settings: "wdth" 100;
 }
 
-/* General body styling */
+/* ── Base ── */
 body {
   font-family: "Bricolage Grotesque", "Inter", sans-serif;
   font-weight: 400;
@@ -146,7 +130,6 @@ body {
   @apply bg-black text-white;
 }
 
-/* Apply bricolage-regular to all headings by default */
 h1,
 h2,
 h3,
@@ -159,10 +142,45 @@ h6 {
   font-variation-settings: "wdth" 100;
 }
 
-/* Add Bricolage font to buttons and inputs for consistency */
 button,
 input,
 select,
 textarea {
   font-family: "Bricolage Grotesque", "Inter", sans-serif;
+}
+
+/* ── Scroll reveal animations ── */
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reveal {
+  opacity: 0;
+  animation: reveal-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: calc(var(--stagger, 0) * 80ms);
+}
+
+.reveal-hero {
+  opacity: 0;
+  animation: reveal-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: var(--stagger, 0ms);
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
