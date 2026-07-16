@@ -40,7 +40,7 @@ const Hero = () => {
           </div>
           <div className="relative flex justify-center">
             <img
-              src="./mucis.jpg"
+              src={`${import.meta.env.BASE_URL}mucis.jpg`}
               alt="Music visualization"
               className="shadow-xl max-w-1.5 md:max-w-md"
             />
